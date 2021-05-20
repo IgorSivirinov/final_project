@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib.animation import FuncAnimation
 from typing import List
-from code.model.IModellingElement import IModellingElement
-from code.model.ProgressBar import ProgressBar
+from code.models.IModellingElement import IModellingElement
+from code.models.ProgressBar import ProgressBar
 
 def animation(frames:  int, start_time: float, stop_time: float, sol: list, modelling_elements: List[IModellingElement]):
     fig = plt.figure()
@@ -75,7 +75,7 @@ def animation(frames:  int, start_time: float, stop_time: float, sol: list, mode
             plots[j * 2 + 1].set_data(solve_line[0], solve_line[1])
             plots[j * 2 + 1].set_3d_properties(solve_line[2])
 
-    qu = 0.005
+    qu = 15
 
     ax.set_xlim3d([-qu, qu])
     ax.set_xlabel('X')
@@ -89,6 +89,8 @@ def animation(frames:  int, start_time: float, stop_time: float, sol: list, mode
     ani = FuncAnimation(fig, animation_func, frames, interval=50)
 
     # ani.save("tipo.gif")
+
     plt.show()
+    ani.save("tipo4.gif")
     bar.finish()
 

@@ -1,35 +1,20 @@
-from IModellingElement import IModellingElement
-from constant import G, k
+from code.models.IModellingElement import IModellingElement
+from code.models.constant import G, k
 
-class ElectricField(IModellingElement):
 
-    Ex: float
-    Ey: float
-    Ez: float
+class Electron(IModellingElement):
+    mass: float = 9.1 * 10 ** (-31)
+    electric_charge: float = -1.6 * 10 ** (-19)
 
-    Bx: float
-    By: float
-    Bz: float
-
-    def __init__(self, mass, Ex, Ey, Ez, Bx, By, Bz, x, v_x, y, v_y, z, v_z):
-
-        self.Ex = Ex
-        self.Ey = Ey
-        self.Ez = Ez
-
-        self.Bx = Bx
-        self.By = By
-        self.Bz = Bz
-
+    def __init__(self, x, v_x, y, v_y, z, v_z):
         self.x = x
         self.v_x = v_x
+
         self.y = y
         self.v_y = v_y
+
         self.z = z
         self.v_z = v_z
-
-        self.mass = mass
-        self.electric_charge = 0
 
     def work_with_x(self, not_variable_data: list, variable_data: list, num: int, i: int):
         """
@@ -48,9 +33,6 @@ class ElectricField(IModellingElement):
         x = variable_data[num * 6 + 0]
         y = variable_data[num * 6 + 2]
         z = variable_data[num * 6 + 4]
-        v_x = variable_data[num * 6 + 1]
-        v_y = variable_data[num * 6 + 3]
-        v_z = variable_data[num * 6 + 5]
 
         out = 0.0
 
@@ -59,8 +41,10 @@ class ElectricField(IModellingElement):
             if ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5 != 0:
                 out += (-G * self.mass * (x - it_x) / ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5)
 
-            if (self.Ex + v_y * self.Bz - self.By * v_z) != 0:
-                out += q / m * (self.Ex + v_y * self.Bz - self.By * v_z)
+            if q != 0 and ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5 != 0 and m * (x - it_x) != 0:
+                out += (k * q * self.electric_charge / m * (x - it_x) / (
+                            (x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5)
+
 
         return out
 
@@ -80,9 +64,6 @@ class ElectricField(IModellingElement):
         x = variable_data[num * 6 + 0]
         y = variable_data[num * 6 + 2]
         z = variable_data[num * 6 + 4]
-        v_x = variable_data[num * 6 + 1]
-        v_y = variable_data[num * 6 + 3]
-        v_z = variable_data[num * 6 + 5]
 
         out = 0.0
 
@@ -90,9 +71,9 @@ class ElectricField(IModellingElement):
             # Вычисляем гравитационное взаимодействие variable_data элементов на num-ый элемент
             if ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5 != 0:
                 out += (-G * self.mass * (y - it_y) / ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5)
-
-            if (self.Ey + v_x * self.Bx - self.Bz * v_x) != 0:
-                out += q / m * (self.Ey + v_x * self.Bx - self.Bz * v_x)
+            if q != 0 and ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5 != 0 and m * (y - it_y) != 0:
+                out += (k * q * self.electric_charge / m * (y - it_y) / (
+                            (x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5)
 
         return out
 
@@ -112,9 +93,6 @@ class ElectricField(IModellingElement):
         x = variable_data[num * 6 + 0]
         y = variable_data[num * 6 + 2]
         z = variable_data[num * 6 + 4]
-        v_x = variable_data[num * 6 + 1]
-        v_y = variable_data[num * 6 + 3]
-        v_z = variable_data[num * 6 + 5]
 
         out = 0.0
 
@@ -122,9 +100,8 @@ class ElectricField(IModellingElement):
             # Вычисляем гравитационное взаимодействие variable_data элементов на num-ый элемент
             if ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5 != 0:
                 out += (-G * self.mass * (z - it_z) / ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5)
-
-            if (self.Ez + v_x * self.By - self.Bx * v_y) != 0:
-                out += q / m * (self.Ez + v_x * self.By - self.Bx * v_y)
+            if q != 0 and ((x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5 != 0 and m * (z - it_z) != 0:
+                out += (k * q * self.electric_charge / m * (z - it_z) / (
+                            (x - it_x) ** 2 + (y - it_y) ** 2 + (z - it_z) ** 2) ** 1.5)
 
         return out
-

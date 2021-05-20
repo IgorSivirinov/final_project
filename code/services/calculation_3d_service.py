@@ -1,12 +1,12 @@
 import numpy as np
 from scipy.integrate import odeint
 from typing import List
-from code.model.IModellingElement import IModellingElement
-from code.model.ProgressBar import ProgressBar
+from code.models.IModellingElement import IModellingElement
+from code.models.ProgressBar import ProgressBar
 
 def calculation_coordinate(frames: int, start_time: float, stop_time: float,
                            modelling_elements: List[IModellingElement]):
-    bar = ProgressBar(" Calculation", max=stop_time*10**3)
+    bar = ProgressBar(" Calculation", max=stop_time*1000)
 
     def get_dv_xdt(variable_data: list, num: int):
         """
@@ -60,7 +60,7 @@ def calculation_coordinate(frames: int, start_time: float, stop_time: float,
         # Элементы объекта: 0 = dxdt, 1 = dv_xdt, 2 = dydt, 3 = dv_ydt, 4 = dzdt, 5 = dv_zdt
         outs = []
 
-        bar.index = t*10**3
+        bar.index = t*1000
         bar.update()
 
         # Для каждего моделируемого объекта вычислем возвращяемые даннные
